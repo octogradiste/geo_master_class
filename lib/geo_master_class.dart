@@ -94,7 +94,7 @@ class _GeoMasterClassState extends State<GeoMasterClass> {
               style: Theme.of(context).textTheme.labelMedium,
             ),
             const SizedBox(height: 24),
-            Center(
+            Expanded(
               child: FutureBuilder<ui.Image>(
                 future: loadImage(),
                 builder: (context, snapshot) {
@@ -103,7 +103,7 @@ class _GeoMasterClassState extends State<GeoMasterClass> {
                     return InteractiveViewer(
                       maxScale: 10,
                       child: FittedBox(
-                        fit: BoxFit.fill,
+                        fit: BoxFit.fitHeight,
                         child: SizedBox(
                           width: image.width.toDouble(),
                           height: image.height.toDouble(),
