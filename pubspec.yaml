@@ -61,6 +61,7 @@ flutter:
 
   assets:
     - assets/images/world5400x2700.jpg
+    - assets/data/cities.csv
 
   # To add assets to your application, add an assets section, like this:
   # assets:
