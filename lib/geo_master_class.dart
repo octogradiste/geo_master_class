@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'dart:ui' as ui;
 
 import 'cities.dart';
@@ -31,6 +32,7 @@ class _GeoMasterClassState extends State<GeoMasterClass> {
       body: Padding(
         padding: const EdgeInsets.all(32.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
               controller: controller,
@@ -52,7 +54,12 @@ class _GeoMasterClassState extends State<GeoMasterClass> {
                 }
               },
             ),
-            const SizedBox(height: 48),
+            const SizedBox(height: 8),
+            Text(
+              'You found ${cities.length} ${Intl.plural(cities.length, one: 'city', other: 'cities')}.',
+              style: Theme.of(context).textTheme.labelMedium,
+            ),
+            const SizedBox(height: 24),
             Center(
               child: FutureBuilder<ui.Image>(
                 future: loadImage(),
