@@ -21,7 +21,7 @@ data.columns = ['name', 'coordinates']
 def stringify(row):
     result = ''
     for x, y in row:
-        result += f'{x},{y},'
+        result += f'{x}:{y},'
 
     if result == '':
         return ''
