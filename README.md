@@ -1,3 +1,3 @@
-# geo_master_class
-Geography Guessing Game in Flutter
+# Geo Master Class
 
+Geography Guessing Game in Flutter
