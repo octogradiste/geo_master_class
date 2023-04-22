@@ -17,7 +17,7 @@ class Coordinates {
 
 class Cities {
   static var isInitialized = false;
-  static const converter = CsvToListConverter(fieldDelimiter: ';');
+  static const converter = CsvToListConverter(fieldDelimiter: ';', eol: '\n');
   static late final Map<String, List<Coordinates>> cities;
 
   static Future<void> initialize() async {
@@ -25,6 +25,7 @@ class Cities {
       final file = await rootBundle.loadString("assets/data/cities.csv");
       final data = converter
           .convert(file)
+          .skip(1)
           .map((list) => list.map((e) => e.toString()).toList());
 
       cities = {
