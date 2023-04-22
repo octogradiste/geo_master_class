@@ -11,6 +11,8 @@ const earthCircumference = 40075; // in km
 const earthRadius = 6371; // in km
 const cityRadius = 200; // in km
 
+const difficulties = [50, 100, 200];
+
 class GeoMasterClass extends StatefulWidget {
   const GeoMasterClass({Key? key}) : super(key: key);
 
@@ -22,6 +24,7 @@ class _GeoMasterClassState extends State<GeoMasterClass> {
   final Set<String> cities = {};
   final Set<Coordinate> coordinates = {};
   final controller = TextEditingController();
+  var difficulty = difficulties.last;
 
   @override
   void initState() {
@@ -33,33 +36,61 @@ class _GeoMasterClassState extends State<GeoMasterClass> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(32.0),
+        padding: const EdgeInsets.all(24.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextField(
-              controller: controller,
-              autofocus: true,
-              decoration: const InputDecoration(
-                hintText: 'Enter a city name',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
+            Text(
+              'Try to cover Europe with cities',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: controller,
+                    autofocus: true,
+                    decoration: const InputDecoration(
+                      hintText: 'Enter a city name',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
+                    ),
+                    onChanged: (value) {
+                      final city = value.toLowerCase();
+                      if (!cities.contains(city) &&
+                          Cities.cities.containsKey(city)) {
+                        controller.clear();
+                        setState(() {
+                          coordinates.addAll(Cities.cities[city]!);
+                          cities.add(city);
+                        });
+                      }
+                    },
+                  ),
                 ),
-              ),
-              onChanged: (value) {
-                final city = value.toLowerCase();
-                if (!cities.contains(city) && Cities.cities.containsKey(city)) {
-                  controller.clear();
-                  setState(() {
-                    coordinates.addAll(Cities.cities[city]!);
-                    cities.add(city);
-                  });
-                }
-              },
+                const SizedBox(width: 16),
+                DropdownButton<int>(
+                  value: difficulty,
+                  items: [
+                    for (var difficulty in difficulties)
+                      DropdownMenuItem(
+                        value: difficulty,
+                        child: Text('$difficulty km'),
+                      ),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      difficulty = value ?? difficulty;
+                    });
+                  },
+                )
+              ],
             ),
             const SizedBox(height: 8),
             Text(
-              'You found ${cities.length} ${Intl.plural(cities.length, one: 'city', other: 'cities')}.',
+              'You found ${cities.length} ${Intl.plural(cities.length, one: 'city', other: 'cities')}',
               style: Theme.of(context).textTheme.labelMedium,
             ),
             const SizedBox(height: 24),
@@ -80,6 +111,7 @@ class _GeoMasterClassState extends State<GeoMasterClass> {
                             painter: CityPainter(
                               image: image,
                               coordinates: coordinates,
+                              cityRadius: difficulty,
                             ),
                           ),
                         ),
@@ -106,10 +138,12 @@ class _GeoMasterClassState extends State<GeoMasterClass> {
 class CityPainter extends CustomPainter {
   final ui.Image image;
   final Set<Coordinate> coordinates;
+  final int cityRadius;
 
   const CityPainter({
     required this.image,
     required this.coordinates,
+    required this.cityRadius,
   });
 
   @override
@@ -125,7 +159,6 @@ class CityPainter extends CustomPainter {
       final lat = coordinate.longitude * pi / 180;
       final circumference = 2 * pi * earthRadius * cos(lat);
       final radius = cityRadius * image.width / max(circumference, 1);
-      print(radius);
       canvas.drawCircle(offset, radius, paint);
     }
   }
