@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -5,8 +7,9 @@ import 'dart:ui' as ui;
 
 import 'cities.dart';
 
-const EARTH_CIRCUMFERENCE = 40075; // in km
-const RADIUS = 200; // in km
+const earthCircumference = 40075; // in km
+const earthRadius = 6371; // in km
+const cityRadius = 200; // in km
 
 class GeoMasterClass extends StatefulWidget {
   const GeoMasterClass({Key? key}) : super(key: key);
@@ -118,7 +121,10 @@ class CityPainter extends CustomPainter {
       final x = coordinate.getX(image.width);
       final y = coordinate.getY(image.height);
       final offset = Offset(x, y);
-      final radius = RADIUS * image.width / EARTH_CIRCUMFERENCE;
+      final lat = coordinate.longitude * pi / 180;
+      final circumference = 2 * pi * earthRadius * cos(lat);
+      final radius = cityRadius * image.width / max(circumference, 1);
+      print(radius);
       canvas.drawCircle(offset, radius, paint);
     }
   }
