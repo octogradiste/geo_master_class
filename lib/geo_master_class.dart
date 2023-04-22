@@ -28,13 +28,15 @@ class _GeoMasterClassState extends State<GeoMasterClass> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(32),
-            child: TextField(
+      body: Padding(
+        padding: const EdgeInsets.all(32.0),
+        child: Column(
+          children: [
+            TextField(
               controller: controller,
+              autofocus: true,
               decoration: const InputDecoration(
+                hintText: 'Enter a city name',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(8)),
                 ),
@@ -50,9 +52,8 @@ class _GeoMasterClassState extends State<GeoMasterClass> {
                 }
               },
             ),
-          ),
-          Expanded(
-            child: Center(
+            const SizedBox(height: 48),
+            Center(
               child: FutureBuilder<ui.Image>(
                 future: loadImage(),
                 builder: (context, snapshot) {
@@ -60,7 +61,7 @@ class _GeoMasterClassState extends State<GeoMasterClass> {
                     final image = snapshot.requireData;
                     return InteractiveViewer(
                       child: FittedBox(
-                        fit: BoxFit.contain,
+                        fit: BoxFit.fill,
                         child: SizedBox(
                           width: image.width.toDouble(),
                           height: image.height.toDouble(),
@@ -79,8 +80,8 @@ class _GeoMasterClassState extends State<GeoMasterClass> {
                 },
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
