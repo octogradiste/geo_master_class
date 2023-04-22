@@ -70,6 +70,7 @@ class _GeoMasterClassState extends State<GeoMasterClass> {
                   if (snapshot.hasData) {
                     final image = snapshot.requireData;
                     return InteractiveViewer(
+                      maxScale: 10,
                       child: FittedBox(
                         fit: BoxFit.fill,
                         child: SizedBox(
